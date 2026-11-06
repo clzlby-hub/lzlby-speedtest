@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Cloudflare 全球专线",
+    "server": "https://speed.cloudflare.com",
+    "id": 1,
+    "dlURL": "__down?bytes=50000000",
+    "ulURL": "__up",
+    "pingURL": "__down?bytes=0",
+    "getIpURL": "https://api.ipify.org?format=json",
+    "sponsorName": "Cloudflare 全球专线",
+    "sponsorURL": "https://speed.cloudflare.com"
+  },
+  {
+    "name": "中国移动 / 腾讯骨干网",
+    "server": "https://dldir1.qq.com",
+    "id": 2,
+    "dlURL": "weixin/Windows/WeChatSetup.exe",
+    "ulURL": "https://speed.cloudflare.com/__up",
+    "pingURL": "weixin/Windows/WeChatSetup.exe",
+    "getIpURL": "https://myip.ipip.net/json",
+    "sponsorName": "中国移动 / 腾讯骨干网",
+    "sponsorURL": "https://cloud.tencent.com"
+  },
+  {
+    "name": "中国电信 / 华为云专网",
+    "server": "https://repo.huaweicloud.com",
+    "id": 3,
+    "dlURL": "debian/ls-lR.gz",
+    "ulURL": "https://speed.cloudflare.com/__up",
+    "pingURL": "debian/ls-lR.gz",
+    "getIpURL": "https://myip.ipip.net/json",
+    "sponsorName": "中国电信 / 华为云专网",
+    "sponsorURL": "https://huaweicloud.com"
+  },
+  {
+    "name": "中国联通 / 阿里云骨干网",
+    "server": "https://mirrors.aliyun.com",
+    "id": 4,
+    "dlURL": "debian/ls-lR.gz",
+    "ulURL": "https://speed.cloudflare.com/__up",
+    "pingURL": "debian/ls-lR.gz",
+    "getIpURL": "https://myip.ipip.net/json",
+    "sponsorName": "中国联通 / 阿里云骨干网",
+    "sponsorURL": "https://aliyun.com"
+  },
+  {
+    "name": "Google 全球网络",
+    "server": "https://dl.google.com",
+    "id": 5,
+    "dlURL": "android/repository/platform-tools-latest-windows.zip",
+    "ulURL": "https://speed.cloudflare.com/__up",
+    "pingURL": "android/repository/platform-tools-latest-windows.zip",
+    "getIpURL": "https://api.ipify.org?format=json",
+    "sponsorName": "Google 全球网络",
+    "sponsorURL": "https://google.com"
+  },
+  {
+    "name": "南京大学 / CERNET",
+    "server": "https://mirrors.nju.edu.cn",
+    "id": 6,
+    "dlURL": "ubuntu-releases/24.04/ubuntu-24.04.1-desktop-amd64.iso",
+    "ulURL": "https://speed.cloudflare.com/__up",
+    "pingURL": "https://mirrors.nju.edu.cn",
+    "getIpURL": "https://myip.ipip.net/json",
+    "sponsorName": "南京大学 / CERNET",
+    "sponsorURL": "https://mirrors.nju.edu.cn"
+  }
+]

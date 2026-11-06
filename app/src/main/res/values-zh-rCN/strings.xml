@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">LibreSpeed TV</string>
+
+    <string name="nav_speedtest">测速</string>
+    <string name="nav_history">历史记录</string>
+    <string name="nav_servers">测速节点</string>
+    <string name="nav_settings">设置</string>
+
+    <string name="unit_mbps">Mbps</string>
+    <string name="unit_mbytes">MB/s</string>
+    <string name="unit_ms">ms</string>
+    <string name="unit_percent" formatted="false">%</string>
+    <string name="unit_seconds_fmt">%1$s 秒</string>
+    <string name="data_mb_fmt">约 %1$s MB</string>
+
+    <string name="test_download">下载速度</string>
+    <string name="test_upload">上传速度</string>
+    <string name="test_ping">延迟 Ping</string>
+    <string name="test_jitter">抖动 Jitter</string>
+    <string name="test_loss">丢包率 Loss</string>
+    <string name="test_start">开始测速</string>
+    <string name="test_stop">停止测速</string>
+    <string name="test_restart">再次测速</string>
+    <string name="test_failed">测速遇到错误</string>
+
+    <string name="phase_ping">正在测试延迟与抖动…</string>
+    <string name="phase_download">正在测试下载带宽…</string>
+    <string name="phase_upload">正在测试上传带宽…</string>
+    <string name="phase_done">测速完成</string>
+
+    <string name="servers_selecting">正在探测测速节点…</string>
+    <string name="servers_load_failed">节点列表加载失败，按 OK 键重试</string>
+    <string name="servers_none">无可用节点</string>
+    <string name="servers_favorites">收藏节点</string>
+    <string name="servers_all">全部节点</string>
+    <string name="servers_refresh">刷新节点</string>
+    <string name="servers_unreachable">无法连接</string>
+    <string name="servers_delete">删除节点</string>
+    <string name="servers_add">添加自建/私有节点</string>
+    <string name="servers_add_name">节点名称 (如: 家庭局域网)</string>
+    <string name="servers_add_url">节点地址 URL</string>
+    <string name="servers_add_hint">例如: http://192.168.1.1:8989/ 或 http://10.10.2.1:8989/</string>
+    <string name="servers_add_invalid">无效的 URL 格式</string>
+    <string name="servers_add_confirm">保存并选择</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_close">关闭</string>
+    <string name="nav_back">返回</string>
+
+    <string name="history_empty">暂无测速记录，点击开始进行第一次测速</string>
+    <string name="history_clear">清空历史</string>
+    <string name="history_clear_confirm">确定清空所有测速记录吗？</string>
+    <string name="history_delete">删除</string>
+
+    <string name="settings_units">速度单位</string>
+    <string name="unit_mbps_long">Mbps (兆比特/秒 · 运营商常用带宽单位)</string>
+    <string name="unit_mbytes_long">MB/s (兆字节/秒 · 下载文件实际速度)</string>
+    <string name="settings_telemetry">共享测速结果给测试服务器</string>
+    <string name="settings_telemetry_summary">完全开源无广告，默认关闭遥测，保障局域网与内网隐私。</string>
+    <string name="settings_license">开源软件，遵循 GNU LGPL-3.0 协议</string>
+
+    <string name="server_auto_select">自动优选最佳节点</string>
+    <string name="server_selected">当前已选节点</string>
+    <string name="result_title">测速结果详情</string>
+</resources>
