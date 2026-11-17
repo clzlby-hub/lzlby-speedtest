@@ -61,25 +61,13 @@ class TestEngine(private val context: Context) {
         val probeJobs = serverList.map { s ->
             async {
                 val pingUrl = ModernSpeedtestWorker.resolveUrl(s.server, s.pingURL)
-                var conn: java.net.HttpURLConnection? = null
-                try {
-                    val t0 = System.currentTimeMillis()
-                    // Probe ping directly
-                    conn = ModernSpeedtestWorker.openConnection(pingUrl, timeoutMs = 1200, useProxy = false)
-                    conn.requestMethod = "GET"
-                    conn.instanceFollowRedirects = true
-                    val code = conn.responseCode
-                    val rtt = (System.currentTimeMillis() - t0).toFloat()
-                    if (code in 200..399) {
-                        s.setPing(rtt)
-                    } else {
-                        s.setPing(-1f)
-                    }
-                } catch (_: Exception) {
-                    s.setPing(-1f)
-                } finally {
-                    try { conn?.disconnect() } catch (_: Exception) {}
-                }
+                val res = ModernSpeedtestWorker.probeOnce(
+                    urlString = pingUrl,
+                    timeoutMs = 1200,
+                    useProxy = false,
+                    keepAlive = false
+                )
+                s.setPing(if (res.success) res.rttMs.toFloat() else -1f)
             }
         }
 

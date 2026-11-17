@@ -58,9 +58,9 @@
     "name": "南京大学 / CERNET",
     "server": "https://mirrors.nju.edu.cn",
     "id": 6,
-    "dlURL": "ubuntu-releases/24.04/ubuntu-24.04.1-desktop-amd64.iso",
+    "dlURL": "debian/ls-lR.gz",
     "ulURL": "https://speed.cloudflare.com/__up",
-    "pingURL": "https://mirrors.nju.edu.cn",
+    "pingURL": "debian/ls-lR.gz",
     "getIpURL": "https://myip.ipip.net/json",
     "sponsorName": "南京大学 / CERNET",
     "sponsorURL": "https://mirrors.nju.edu.cn"

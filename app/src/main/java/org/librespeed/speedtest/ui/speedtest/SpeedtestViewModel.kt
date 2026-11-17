@@ -11,17 +11,17 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.fdossena.speedtest.core.Speedtest
-import com.fdossena.speedtest.core.base.Connection
-import com.fdossena.speedtest.core.ping.Pinger
 import com.fdossena.speedtest.core.serverSelector.ServerSelector
 import com.fdossena.speedtest.core.serverSelector.TestPoint
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.librespeed.speedtest.data.AppPreferences
@@ -31,6 +31,7 @@ import org.librespeed.speedtest.data.HistoryDatabase
 import org.librespeed.speedtest.data.HistoryEntry
 import org.librespeed.speedtest.data.NetworkInfo
 import org.librespeed.speedtest.data.key
+import org.librespeed.speedtest.engine.ModernSpeedtestWorker
 import org.librespeed.speedtest.engine.TestEngine
 import org.librespeed.speedtest.engine.TestMode
 import java.util.Collections
@@ -86,8 +87,7 @@ class SpeedtestViewModel(application: Application) : AndroidViewModel(applicatio
     private var failed = false
 
     //side channel measuring latency while the line is under load (bufferbloat)
-    @Volatile
-    private var loadedPinger: Pinger? = null
+    private var loadedPingJob: Job? = null
     private val loadedDownSamples = Collections.synchronizedList(mutableListOf<Double>())
     private val loadedUpSamples = Collections.synchronizedList(mutableListOf<Double>())
 
@@ -324,30 +324,35 @@ class SpeedtestViewModel(application: Application) : AndroidViewModel(applicatio
 
     private fun isRunning(): Boolean = _state.value.phase in setOf(Phase.PING, Phase.DOWNLOAD, Phase.UPLOAD)
 
-    private fun startLoadedPinger(server: TestPoint) {
-        if (loadedPinger != null) return
-        loadedPinger = try {
-            object : Pinger(Connection(server.server), server.pingURL) {
-                override fun onPong(ns: Long): Boolean {
-                    val ms = ns / 1_000_000.0
+    private fun startLoadedPinger(server: TestPoint, useProxy: Boolean) {
+        if (loadedPingJob != null) return
+        val pingUrl = ModernSpeedtestWorker.resolveUrl(server.server, server.pingURL)
+        loadedPingJob = viewModelScope.launch(Dispatchers.IO) {
+            var preferGetRange = false
+            while (isActive) {
+                val res = ModernSpeedtestWorker.probeOnce(
+                    urlString = pingUrl,
+                    timeoutMs = 1500,
+                    useProxy = useProxy,
+                    preferGetRange = preferGetRange,
+                    keepAlive = true
+                )
+                preferGetRange = res.usedGetRange
+                if (res.success) {
                     when (_state.value.phase) {
-                        Phase.DOWNLOAD -> loadedDownSamples.add(ms)
-                        Phase.UPLOAD -> loadedUpSamples.add(ms)
+                        Phase.DOWNLOAD -> loadedDownSamples.add(res.rttMs)
+                        Phase.UPLOAD -> loadedUpSamples.add(res.rttMs)
                         else -> Unit
                     }
-                    return true
                 }
-
-                override fun onError(err: String?) = Unit
+                delay(450)
             }
-        } catch (_: Exception) {
-            null
         }
     }
 
     private fun stopLoadedPinger() {
-        runCatching { loadedPinger?.stopASAP() }
-        loadedPinger = null
+        loadedPingJob?.cancel()
+        loadedPingJob = null
     }
 
     private fun start() {
@@ -383,7 +388,7 @@ class SpeedtestViewModel(application: Application) : AndroidViewModel(applicatio
         )
         engine.start(object : Speedtest.SpeedtestHandler() {
             override fun onDownloadUpdate(dl: Double, progress: Double) {
-                startLoadedPinger(server)
+                startLoadedPinger(server, current.isProxyMode)
                 _state.update {
                     it.copy(
                         phase = Phase.DOWNLOAD,
@@ -395,7 +400,7 @@ class SpeedtestViewModel(application: Application) : AndroidViewModel(applicatio
             }
 
             override fun onUploadUpdate(ul: Double, progress: Double) {
-                startLoadedPinger(server)
+                startLoadedPinger(server, current.isProxyMode)
                 _state.update {
                     it.copy(
                         phase = Phase.UPLOAD,
